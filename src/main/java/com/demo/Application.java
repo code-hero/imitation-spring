@@ -24,10 +24,10 @@ public class Application {
 
     //测试方法
     private static void yourCode() throws Exception {
-//        iocTest();
+        iocTest();
 //        asyncTest01();
 //        asyncTest02();
-        asyncTest03();
+//        asyncTest03();
 //        asyncTest04();
     }
 
