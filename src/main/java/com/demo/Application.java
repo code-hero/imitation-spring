@@ -1,7 +1,7 @@
 package com.demo;
 
+import com.demo.async.TaskService;
 import com.demo.ioc.UserService;
-import com.demo.threadpool.TaskService;
 import com.slc.framework.async.anno.Async;
 import com.slc.framework.async.anno.EnableAsync;
 import com.slc.framework.container.Container;

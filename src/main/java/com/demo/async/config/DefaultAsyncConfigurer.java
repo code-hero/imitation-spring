@@ -1,4 +1,4 @@
-package com.demo.threadpool.config;
+package com.demo.async.config;
 
 import com.slc.framework.async.core.AsyncConfigurer;
 import com.slc.framework.async.core.AsyncUncaughtExceptionHandler;

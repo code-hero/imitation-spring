@@ -1,4 +1,4 @@
-package com.demo.threadpool;
+package com.demo.async;
 
 import com.slc.framework.async.anno.Async;
 import com.slc.framework.async.core.AsyncResult;
