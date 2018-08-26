@@ -1,26 +1,25 @@
-package com.slc.framework.container.handle.ioc;
+package com.demo.handle;
 
-import com.slc.framework.container.handle.Handle;
+import com.slc.framework.handle.core.Handle;
 import net.sf.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
 
-public class IocHandle extends Handle {
+public class MyHandle extends Handle {
     @Override
     public boolean beforeHandle(Object obj, Method method, Object[] args, MethodProxy proxy) {
-        System.out.println("IocHandle beforeHandle");
+        System.out.println("MyHandle.beforeHandle#......");
         return super.beforeHandle(obj, method, args, proxy);
     }
 
     @Override
-    public Object afterHandle(Object result) {
-        System.out.println("IocHandle afterHandle");
-        return super.afterHandle(result);
+    public Object afterHandle(Object obj, Method method, Object[] args, MethodProxy proxy, Object result) {
+        System.out.println("MyHandle.afterHandle#......");
+        return super.afterHandle(obj, method, args, proxy, result);
     }
 
     @Override
     public void exceptionHandle(Object obj, Method method, Object[] args, MethodProxy proxy, Exception e) {
-        System.out.println("IocHandle exceptionHandle");
         super.exceptionHandle(obj, method, args, proxy, e);
     }
 }

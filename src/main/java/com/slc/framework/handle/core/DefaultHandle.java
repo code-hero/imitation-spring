@@ -1,4 +1,4 @@
-package com.slc.framework.container.handle;
+package com.slc.framework.handle.core;
 
 import net.sf.cglib.proxy.MethodProxy;
 
@@ -10,8 +10,8 @@ public class DefaultHandle extends Handle {
         return super.beforeHandle(obj, method, args, proxy);
     }
 
-    public Object afterHandle(Object result) {
-        return super.afterHandle(result);
+    public Object afterHandle(Object obj, Method method, Object[] args, MethodProxy proxy, Object result) {
+        return super.afterHandle(obj, method, args, proxy, result);
     }
 
     public void exceptionHandle(Object obj, Method method, Object[] args, MethodProxy proxy, Exception e) {

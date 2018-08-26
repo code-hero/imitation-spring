@@ -2,9 +2,9 @@ package com.slc.framework.ioc.core;
 
 import com.slc.framework.container.Configuration;
 import com.slc.framework.container.ConfigurationFactory;
-import com.slc.framework.container.EntranceApplication;
 import com.slc.framework.container.callback.DefaultCallbackFilter;
 import com.slc.framework.ioc.anno.Autowired;
+import com.slc.framework.ioc.anno.EnableIoc;
 import com.slc.framework.ioc.anno.Service;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
@@ -32,8 +32,8 @@ public class AppContext {
 
     public void init() throws Exception {
         Configuration configuration = ConfigurationFactory.INSTANCE.loadConfiguration();
-        EntranceApplication entranceApplication = configuration.getEntranceApplication();
-        String[] scanBasePackages = entranceApplication.scanBasePackages();
+        EnableIoc enableIoc = configuration.getEnableIoc();
+        String[] scanBasePackages = enableIoc.scanBasePackages();
         for (String scanBasePackage : scanBasePackages) {
             AppContext.getInstance().createBeanDefinitionMap(scanBasePackage);
         }
@@ -106,8 +106,6 @@ public class AppContext {
             key = annotation.value();
         }
         BeanDefinition beanDefinition = new BeanDefinition();
-        beanDefinition.setOrigClass(clazz);
-
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(clazz);
         Callback[] callbacks = DefaultCallbackFilter.callbacks;

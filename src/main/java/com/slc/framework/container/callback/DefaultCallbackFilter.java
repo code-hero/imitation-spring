@@ -1,6 +1,9 @@
 package com.slc.framework.container.callback;
 
 import com.slc.framework.async.anno.Async;
+import com.slc.framework.async.anno.EnableAsync;
+import com.slc.framework.container.Configuration;
+import com.slc.framework.container.ConfigurationFactory;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.CallbackFilter;
 import net.sf.cglib.proxy.NoOp;
@@ -17,7 +20,8 @@ public class DefaultCallbackFilter implements CallbackFilter {
             IocCallback.INSTANCE,
             AsyncCallback.INSTANCE
     };
-    public enum CallbackFilterEnum{
+
+    public enum CallbackFilterEnum {
         DEFAULT(0),
         IOC(1),
         ASYNC(2);
@@ -41,14 +45,18 @@ public class DefaultCallbackFilter implements CallbackFilter {
 
     @Override
     public int accept(Method method) {
-        int result=-1;
         if (method.getDeclaringClass() == clazz) {
-            if(method.isAnnotationPresent(Async.class)){
+            if (method.isAnnotationPresent(Async.class)) {
+                Configuration configuration = ConfigurationFactory.INSTANCE.loadConfiguration();
+                EnableAsync enableAsync = configuration.getEnableAsync();
+                if(enableAsync==null){
+                    return CallbackFilterEnum.DEFAULT.getCode();
+                }
                 return CallbackFilterEnum.ASYNC.getCode();
-            }else{
+            } else {
                 return CallbackFilterEnum.IOC.getCode();
             }
-        }else{
+        } else {
             return CallbackFilterEnum.DEFAULT.getCode();
         }
     }

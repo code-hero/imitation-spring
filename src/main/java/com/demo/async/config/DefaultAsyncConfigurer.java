@@ -21,6 +21,7 @@ public class DefaultAsyncConfigurer implements AsyncConfigurer {
     public ExecutorService getAsyncExecutor() {
         return executor;
     }
+
     @Override
     public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
         return asyncUncaughtExceptionHandler;

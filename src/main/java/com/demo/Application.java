@@ -1,19 +1,22 @@
 package com.demo;
 
 import com.demo.async.TaskService;
+import com.demo.handle.MyHandle;
 import com.demo.ioc.UserService;
 import com.slc.framework.async.anno.Async;
 import com.slc.framework.async.anno.EnableAsync;
 import com.slc.framework.container.Container;
 import com.slc.framework.container.EntranceApplication;
+import com.slc.framework.handle.anno.EnableHandle;
 import com.slc.framework.ioc.anno.EnableIoc;
 import com.slc.framework.ioc.core.BeanFactory;
 
 import java.util.concurrent.Future;
 
 @EnableAsync(annotation = Async.class)
-@EnableIoc
-@EntranceApplication(scanBasePackages = "com.demo")
+@EnableIoc(scanBasePackages = "com.demo")//必须
+@EnableHandle(defaultHandle = true, handleClasses = {MyHandle.class})
+@EntranceApplication
 public class Application {
 
     public static void main(String[] args) throws Exception {
@@ -24,8 +27,8 @@ public class Application {
 
     //测试方法
     private static void yourCode() throws Exception {
-        iocTest();
-//        asyncTest01();
+//        iocTest();
+        asyncTest01();
 //        asyncTest02();
 //        asyncTest03();
 //        asyncTest04();
@@ -34,8 +37,8 @@ public class Application {
     private static void asyncTest01() throws Exception {
         TaskService taskService = BeanFactory.getBean(TaskService.class);
         Future<String> future = taskService.asyncTask01();
-        while(true){
-            if(future.isDone()){
+        while (true) {
+            if (future.isDone()) {
                 System.out.println("future.get() = " + future.get());
                 break;
             }
@@ -46,7 +49,7 @@ public class Application {
 
     private static void asyncTest02() throws Exception {
         TaskService taskService = BeanFactory.getBean(TaskService.class);
-        for(int i=0;i<=20;i++){
+        for (int i = 0; i <= 20; i++) {
             taskService.asyncTask02();
         }
         System.out.println("taskService = " + taskService);
@@ -55,8 +58,8 @@ public class Application {
     private static void asyncTest03() throws Exception {
         TaskService taskService = BeanFactory.getBean(TaskService.class);
         Future<String> future = taskService.asyncTask03();
-        while(true){
-            if(future.isDone()){
+        while (true) {
+            if (future.isDone()) {
                 System.out.println("future.get() = " + future.get());
                 break;
             }

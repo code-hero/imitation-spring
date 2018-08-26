@@ -1,11 +1,11 @@
-package com.slc.framework.container.handle;
+package com.slc.framework.handle.core;
 
 public class HandleConfig {
     private HandleConfig before;
     private HandleConfig next;
     private Handle handle;
 
-    public HandleConfig clone(){
+    public HandleConfig clone() {
         HandleConfig handleConfig = new HandleConfig();
         handleConfig.setBefore(this.before);
         handleConfig.setNext(this.next);
@@ -14,7 +14,7 @@ public class HandleConfig {
     }
 
 
-    public static HandleConfig create(Handle handle){
+    public static HandleConfig create(Handle handle) {
         HandleConfig handleConfig = new HandleConfig();
         handleConfig.setHandle(handle);
         return handleConfig;

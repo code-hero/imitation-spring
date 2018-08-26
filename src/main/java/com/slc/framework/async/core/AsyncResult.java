@@ -22,55 +22,57 @@ import java.util.concurrent.TimeUnit;
 
 public class AsyncResult<V> implements Future<V> {
 
-	private final V value;
+    private final V value;
 
-	private final ExecutionException executionException;
-
-
-	/**
-	 * Create a new AsyncResult holder.
-	 * @param value the value to pass through
-	 */
-	public AsyncResult(V value) {
-		this(value, null);
-	}
-
-	/**
-	 * Create a new AsyncResult holder.
-	 * @param value the value to pass through
-	 */
-	private AsyncResult(V value, ExecutionException ex) {
-		this.value = value;
-		this.executionException = ex;
-	}
+    private final ExecutionException executionException;
 
 
-	@Override
-	public boolean cancel(boolean mayInterruptIfRunning) {
-		return false;
-	}
+    /**
+     * Create a new AsyncResult holder.
+     *
+     * @param value the value to pass through
+     */
+    public AsyncResult(V value) {
+        this(value, null);
+    }
 
-	@Override
-	public boolean isCancelled() {
-		return false;
-	}
+    /**
+     * Create a new AsyncResult holder.
+     *
+     * @param value the value to pass through
+     */
+    private AsyncResult(V value, ExecutionException ex) {
+        this.value = value;
+        this.executionException = ex;
+    }
 
-	@Override
-	public boolean isDone() {
-		return true;
-	}
 
-	@Override
-	public V get() throws ExecutionException {
-		if (this.executionException != null) {
-			throw this.executionException;
-		}
-		return this.value;
-	}
+    @Override
+    public boolean cancel(boolean mayInterruptIfRunning) {
+        return false;
+    }
 
-	@Override
-	public V get(long timeout, TimeUnit unit) throws ExecutionException {
-		return get();
-	}
+    @Override
+    public boolean isCancelled() {
+        return false;
+    }
+
+    @Override
+    public boolean isDone() {
+        return true;
+    }
+
+    @Override
+    public V get() throws ExecutionException {
+        if (this.executionException != null) {
+            throw this.executionException;
+        }
+        return this.value;
+    }
+
+    @Override
+    public V get(long timeout, TimeUnit unit) throws ExecutionException {
+        return get();
+    }
 
 }

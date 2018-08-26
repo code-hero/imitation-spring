@@ -1,6 +1,7 @@
 package com.slc.framework.container;
 
 import com.slc.framework.async.anno.EnableAsync;
+import com.slc.framework.handle.anno.EnableHandle;
 import com.slc.framework.ioc.anno.EnableIoc;
 
 public class Configuration {
@@ -8,6 +9,7 @@ public class Configuration {
     private EntranceApplication entranceApplication;
     private EnableIoc enableIoc;
     private EnableAsync enableAsync;
+    private EnableHandle enableHandle;
 
     public EntranceApplication getEntranceApplication() {
         return entranceApplication;
@@ -31,5 +33,13 @@ public class Configuration {
 
     public void setEnableAsync(EnableAsync enableAsync) {
         this.enableAsync = enableAsync;
+    }
+
+    public EnableHandle getEnableHandle() {
+        return enableHandle;
+    }
+
+    public void setEnableHandle(EnableHandle enableHandle) {
+        this.enableHandle = enableHandle;
     }
 }

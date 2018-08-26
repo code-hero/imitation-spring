@@ -30,7 +30,7 @@ public class AsyncCallback implements MethodInterceptor {
         Async async = method.getAnnotation(Async.class);
         String poolName = async.value();
         ExecutorService executor = null;
-        AsyncUncaughtExceptionHandler exceptionHandler=null;
+        AsyncUncaughtExceptionHandler exceptionHandler = null;
         if (poolName.equals("")) {
             executor = AsyncConfigurerSupport.INSTANCE.getAsyncExecutor();
             exceptionHandler = AsyncConfigurerSupport.INSTANCE.getAsyncUncaughtExceptionHandler();
@@ -47,9 +47,9 @@ public class AsyncCallback implements MethodInterceptor {
                     return ((Future<?>) result).get();
                 }
             } catch (ExecutionException ex) {
-                handleError(finalExceptionHandler,ex, method, args);
+                handleError(finalExceptionHandler, ex, method, args);
             } catch (Throwable ex) {
-                handleError(finalExceptionHandler,ex, method, args);
+                handleError(finalExceptionHandler, ex, method, args);
             }
             return null;
         };
@@ -57,7 +57,7 @@ public class AsyncCallback implements MethodInterceptor {
 
     }
 
-    protected void handleError(AsyncUncaughtExceptionHandler exceptionHandler,Throwable ex, Method method, Object... params) throws Exception {
+    protected void handleError(AsyncUncaughtExceptionHandler exceptionHandler, Throwable ex, Method method, Object... params) throws Exception {
         if (Future.class.isAssignableFrom(method.getReturnType())) {
             if (ex instanceof Exception) {
                 throw (Exception) ex;

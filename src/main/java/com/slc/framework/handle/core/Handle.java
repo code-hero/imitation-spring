@@ -1,4 +1,4 @@
-package com.slc.framework.container.handle;
+package com.slc.framework.handle.core;
 
 import net.sf.cglib.proxy.MethodProxy;
 
@@ -15,29 +15,33 @@ public class Handle {
         while (beforeFlag) {
             beforeFlag = beforeFlag && temp.getHandle().beforeHandle(obj, method, args, proxy);
             temp = temp.getNext();
-            if(temp!=null){
+            if (temp != null) {
                 if (temp.getNext() == null) {
                     beforeFlag = beforeFlag && temp.getHandle().beforeHandle(obj, method, args, proxy);
                     break;
                 }
+            }else{
+                break;
             }
         }
         return beforeFlag;
     }
 
-    public Object doAfterHandle(Object result) {
+    public Object doAfterHandle(Object obj, Method method, Object[] args, MethodProxy proxy, Object result) {
         if (HandleFactory.handleConfigs.size() == 0) {
             return result;
         }
         HandleConfig temp = HandleFactory.lastHandleConfig.clone();
         while (true) {
-            result = temp.getHandle().afterHandle(result);
+            result = temp.getHandle().afterHandle(obj, method, args, proxy, result);
             temp = temp.getBefore();
-            if(temp!=null){
+            if (temp != null) {
                 if (temp.getBefore() == null) {
-                    result = temp.getHandle().afterHandle(result);
+                    result = temp.getHandle().afterHandle(obj, method, args, proxy, result);
                     break;
                 }
+            }else{
+                break;
             }
         }
         return result;
@@ -47,7 +51,7 @@ public class Handle {
         return true;
     }
 
-    public Object afterHandle(Object result) {
+    public Object afterHandle(Object obj, Method method, Object[] args, MethodProxy proxy, Object result) {
         return result;
     }
 

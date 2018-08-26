@@ -8,8 +8,13 @@ public class UserService {
     @Autowired
     private UserInnerService userInnerService;
 
-    public void sayHello(){
+    public void sayHello() {
         System.out.println("hello UserService!");
         userInnerService.sayHello();
+//        try {
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 }

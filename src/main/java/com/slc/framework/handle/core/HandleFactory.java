@@ -1,5 +1,10 @@
-package com.slc.framework.container.handle;
+package com.slc.framework.handle.core;
 
+import com.slc.framework.container.Configuration;
+import com.slc.framework.container.ConfigurationFactory;
+import com.slc.framework.handle.anno.EnableHandle;
+import com.slc.framework.handle.core.log.LogHandle;
+import com.slc.framework.handle.core.time.TimeHandle;
 import net.sf.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
@@ -13,10 +18,33 @@ public class HandleFactory {
     public static HandleConfig lastHandleConfig = new HandleConfig();
     private static final HandleFactory handleFactory = new HandleFactory();
 
-    public void init(){
+    public void init() {
+        List<Handle> handlesToDeal = new ArrayList<>();
+        Configuration configuration = ConfigurationFactory.INSTANCE.loadConfiguration();
+        EnableHandle enableHandle = configuration.getEnableHandle();
+        if(enableHandle!=null){
+            boolean defaultHandle = enableHandle.defaultHandle();
+            if(defaultHandle){
+                handlesToDeal.add(new TimeHandle());
+                handlesToDeal.add(new LogHandle());
+            }
+            Class<? extends Handle>[] handleClasses = enableHandle.handleClasses();
+            //todo 去重// 暂时考虑不会定义系统中的Handle
+            for (Class<? extends Handle> handleClass : handleClasses) {
+                try {
+                    handlesToDeal.add(handleClass.newInstance());
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         List<HandleConfig> temp = new ArrayList<>();
-//        temp.add(HandleConfig.create(new IocHandle()));
-//        temp.add(HandleConfig.create(new AsyncHandle()));
+        for (Handle handle : handlesToDeal) {
+            temp.add(HandleConfig.create(handle));
+        }
         buildHandleConfig(temp);
     }
 
@@ -28,7 +56,7 @@ public class HandleFactory {
                 if (i != temp.size() - 1) {
                     handleConfig.setNext(temp.get(i + 1));
                     HandleFactory.firstHandleConfig.setNext(handleConfig.getNext());
-                }else{
+                } else {
                     HandleFactory.lastHandleConfig.setHandle(handleConfig.getHandle());
                 }
             } else if (i == temp.size() - 1) {
@@ -58,11 +86,11 @@ public class HandleFactory {
         return defaultHandle.doBeforeHandle(obj, method, args, proxy);
     }
 
-    public Object handleAfter(Object result) {
+    public Object handleAfter(Object obj, Method method, Object[] args, MethodProxy proxy, Object result) {
         if (handleConfigs.size() == 0) {
             return result;
         }
-        return defaultHandle.doAfterHandle(result);
+        return defaultHandle.doAfterHandle(obj, method, args, proxy, result);
     }
 
     public void handleException(Object obj, Method method, Object[] args, MethodProxy proxy, Exception e) {
