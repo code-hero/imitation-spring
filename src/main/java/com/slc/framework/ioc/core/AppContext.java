@@ -6,6 +6,7 @@ import com.slc.framework.container.callback.DefaultCallbackFilter;
 import com.slc.framework.ioc.anno.Autowired;
 import com.slc.framework.ioc.anno.EnableIoc;
 import com.slc.framework.ioc.anno.Service;
+import com.slc.framework.util.CommonUtil;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 
@@ -16,13 +17,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created with IntelliJ IDEA.
- * User: sxlju_000
- * Date: 13-10-22
- * Time: 下午11:48
- * To change this template use File | Settings | File Templates.
- */
 public class AppContext {
     private static final AppContext appContext = new AppContext();
     public Map<String, BeanDefinition> beanDefinitionMap = new HashMap<>();
@@ -98,13 +92,7 @@ public class AppContext {
     }
 
     private void initBeanDefinition(Class<?> clazz) {
-        final Service annotation = clazz.getAnnotation(Service.class);
-        String key = null;
-        if (annotation.value() == null || "".equals(annotation.value())) {
-            key = clazz.getSimpleName();
-        } else {
-            key = annotation.value();
-        }
+        String beanName = CommonUtil.getBeanName(clazz);
         BeanDefinition beanDefinition = new BeanDefinition();
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(clazz);
@@ -113,7 +101,8 @@ public class AppContext {
         enhancer.setCallbackFilter(new DefaultCallbackFilter(clazz));
         Object object = enhancer.create();
         beanDefinition.setProxyObject(object);
-        beanDefinitionMap.put(key, beanDefinition);
+        beanDefinition.setBeanName(beanName);
+        beanDefinitionMap.put(beanName, beanDefinition);
     }
 
     public void autowired() throws Exception {
@@ -123,7 +112,13 @@ public class AppContext {
             Field[] declaredFields = superclass.getDeclaredFields();
             for (Field declaredField : declaredFields) {
                 if (declaredField.isAnnotationPresent(Autowired.class)) {
-                    String simpleName = declaredField.getType().getSimpleName();
+                    Autowired autowired = declaredField.getDeclaredAnnotation(Autowired.class);
+                    String simpleName;
+                    if (autowired.beanName().equals("")) {
+                        simpleName = declaredField.getType().getSimpleName();
+                    } else {
+                        simpleName = autowired.beanName();
+                    }
                     Object o2 = beanDefinitionMap.get(simpleName).getProxyObject();
                     if (o2 == null) {
                         throw new Exception("can not find bean " + simpleName);

@@ -49,7 +49,7 @@ public class DefaultCallbackFilter implements CallbackFilter {
             if (method.isAnnotationPresent(Async.class)) {
                 Configuration configuration = ConfigurationFactory.INSTANCE.loadConfiguration();
                 EnableAsync enableAsync = configuration.getEnableAsync();
-                if(enableAsync==null){
+                if (enableAsync == null) {
                     return CallbackFilterEnum.DEFAULT.getCode();
                 }
                 return CallbackFilterEnum.ASYNC.getCode();

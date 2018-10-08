@@ -20,7 +20,7 @@ public class Handle {
                     beforeFlag = beforeFlag && temp.getHandle().beforeHandle(obj, method, args, proxy);
                     break;
                 }
-            }else{
+            } else {
                 break;
             }
         }
@@ -40,7 +40,7 @@ public class Handle {
                     result = temp.getHandle().afterHandle(obj, method, args, proxy, result);
                     break;
                 }
-            }else{
+            } else {
                 break;
             }
         }
@@ -53,9 +53,5 @@ public class Handle {
 
     public Object afterHandle(Object obj, Method method, Object[] args, MethodProxy proxy, Object result) {
         return result;
-    }
-
-    public void exceptionHandle(Object obj, Method method, Object[] args, MethodProxy proxy, Exception e) {
-        throw new RuntimeException(e);
     }
 }

@@ -8,7 +8,11 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface EnableHandle {
-    boolean defaultHandle() default false;
 
-    Class<? extends Handle>[] handleClasses() default {};
+    boolean defaultHandle() default false;//是否启用默认拦截器
+
+    Class<? extends Handle>[] handleClasses() default {};//自定义拦截器
+
+    Class<? extends Annotation> handleAnno() default RequestMapping.class;
+
 }

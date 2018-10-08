@@ -1,6 +1,6 @@
 package com.slc.framework.container.callback;
 
-import com.slc.framework.handle.core.HandleFactory;
+import com.slc.framework.container.processor.ContainerProcessor;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
@@ -17,17 +17,7 @@ public class IocCallback implements MethodInterceptor {
     }
 
     @Override
-    public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-        if (!HandleFactory.getInstance().handleBefore(obj, method, args, proxy)) {
-            return null;
-        }
-        Object result = null;
-        try {
-            result = proxy.invokeSuper(obj, args);
-        } catch (Exception e) {
-            HandleFactory.getInstance().handleException(obj, method, args, proxy, e);
-        }
-        return HandleFactory.getInstance().handleAfter(obj, method, args, proxy, result);
-
+    public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) {
+        return ContainerProcessor.config(obj, method, args, proxy);
     }
 }

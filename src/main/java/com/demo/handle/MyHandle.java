@@ -17,9 +17,4 @@ public class MyHandle extends Handle {
         System.out.println("MyHandle.afterHandle#......");
         return super.afterHandle(obj, method, args, proxy, result);
     }
-
-    @Override
-    public void exceptionHandle(Object obj, Method method, Object[] args, MethodProxy proxy, Exception e) {
-        super.exceptionHandle(obj, method, args, proxy, e);
-    }
 }

@@ -1,8 +1,5 @@
 package com.slc.framework.container;
 
-import com.slc.framework.async.anno.EnableAsync;
-import com.slc.framework.handle.anno.EnableHandle;
-import com.slc.framework.handle.core.HandleFactory;
 import com.slc.framework.ioc.IocContainer;
 
 public class Container {
@@ -15,18 +12,6 @@ public class Container {
         }
         configuration.setEntranceApplication(clazz.getAnnotation(EntranceApplication.class));
 
-        //判断是否启动多线程注解
-        if (clazz.isAnnotationPresent(EnableAsync.class)) {
-            configuration.setEnableAsync(clazz.getAnnotation(EnableAsync.class));
-        }
-
-        //判断是否启动拦截器注解
-        if (clazz.isAnnotationPresent(EnableHandle.class)) {
-            configuration.setEnableHandle(clazz.getAnnotation(EnableHandle.class));
-            HandleFactory.getInstance().init();
-        }
-
         IocContainer.INSTANCE.run(clazz);
-
     }
 }

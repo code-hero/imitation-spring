@@ -1,12 +1,11 @@
-package com.slc.framework.ioc.anno;
+package com.slc.framework.aop.anno;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Autowired {
-    String beanName() default "";
+@Target(ElementType.METHOD)
+public @interface Before {
 }

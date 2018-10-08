@@ -5,6 +5,7 @@ import com.slc.framework.async.anno.Async;
 import com.slc.framework.async.core.AsyncConfigurer;
 import com.slc.framework.async.core.AsyncConfigurerSupport;
 import com.slc.framework.async.core.AsyncUncaughtExceptionHandler;
+import com.slc.framework.container.processor.ContainerProcessor;
 import com.slc.framework.ioc.core.BeanFactory;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
@@ -26,7 +27,7 @@ public class AsyncCallback implements MethodInterceptor {
     }
 
     @Override
-    public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+    public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) {
         Async async = method.getAnnotation(Async.class);
         String poolName = async.value();
         ExecutorService executor = null;
@@ -42,7 +43,7 @@ public class AsyncCallback implements MethodInterceptor {
         AsyncUncaughtExceptionHandler finalExceptionHandler = exceptionHandler;
         Callable<Object> task = () -> {
             try {
-                Object result = proxy.invokeSuper(obj, args);
+                Object result = ContainerProcessor.config(obj, method, args, proxy);
                 if (result instanceof Future) {
                     return ((Future<?>) result).get();
                 }

@@ -13,8 +13,4 @@ public class DefaultHandle extends Handle {
     public Object afterHandle(Object obj, Method method, Object[] args, MethodProxy proxy, Object result) {
         return super.afterHandle(obj, method, args, proxy, result);
     }
-
-    public void exceptionHandle(Object obj, Method method, Object[] args, MethodProxy proxy, Exception e) {
-        super.exceptionHandle(obj, method, args, proxy, e);
-    }
 }

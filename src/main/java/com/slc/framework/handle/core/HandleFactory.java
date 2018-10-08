@@ -9,6 +9,7 @@ import net.sf.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class HandleFactory {
@@ -22,15 +23,21 @@ public class HandleFactory {
         List<Handle> handlesToDeal = new ArrayList<>();
         Configuration configuration = ConfigurationFactory.INSTANCE.loadConfiguration();
         EnableHandle enableHandle = configuration.getEnableHandle();
-        if(enableHandle!=null){
+        List<Class<? extends Handle>> allHandleClasses = new ArrayList<>();
+        List<Class<? extends Handle>> defaultHandleClasses = Arrays.asList(TimeHandle.class, LogHandle.class);
+        if (enableHandle != null) {
             boolean defaultHandle = enableHandle.defaultHandle();
-            if(defaultHandle){
-                handlesToDeal.add(new TimeHandle());
-                handlesToDeal.add(new LogHandle());
+            if (defaultHandle) {
+                allHandleClasses.addAll(defaultHandleClasses);
             }
             Class<? extends Handle>[] handleClasses = enableHandle.handleClasses();
-            //todo 去重// 暂时考虑不会定义系统中的Handle
             for (Class<? extends Handle> handleClass : handleClasses) {
+                if (allHandleClasses.contains(handleClass)) {
+                    continue;
+                }
+                allHandleClasses.add(handleClass);
+            }
+            for (Class<? extends Handle> handleClass : allHandleClasses) {
                 try {
                     handlesToDeal.add(handleClass.newInstance());
                 } catch (InstantiationException e) {
@@ -91,12 +98,5 @@ public class HandleFactory {
             return result;
         }
         return defaultHandle.doAfterHandle(obj, method, args, proxy, result);
-    }
-
-    public void handleException(Object obj, Method method, Object[] args, MethodProxy proxy, Exception e) {
-        if (handleConfigs.size() == 0) {
-            throw new RuntimeException(e);
-        }
-        defaultHandle.exceptionHandle(obj, method, args, proxy, e);
     }
 }
