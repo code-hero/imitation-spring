@@ -3,6 +3,7 @@ realize a sample framework imitation spring
 
 realize
 
-* Ioc
+* IOC
+* AOP
 * Async
 * Handle
