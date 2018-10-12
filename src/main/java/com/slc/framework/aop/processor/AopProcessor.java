@@ -9,9 +9,7 @@ import com.slc.framework.util.CommonUtil;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class AopProcessor {
@@ -45,7 +43,16 @@ public class AopProcessor {
             }
         }
 
-
+        Set<Map.Entry<String, AdviceDefinition>> entries = AdviceFactory.getInstance().adviceDefinitionMap.entrySet();
+        for (Map.Entry<String, AdviceDefinition> entry : entries) {
+            AdviceDefinition adviceDefinition = entry.getValue();
+            if (adviceDefinition.isHasAfter()) {
+                Collections.reverse(adviceDefinition.getAfterMethods());
+            }
+            if (adviceDefinition.isHasAfterReturning()) {
+                Collections.reverse(adviceDefinition.getAfterReturningMethods());
+            }
+        }
     }
 
     private static boolean isMatchByAnno(Class<? extends Annotation> annotation, Method declaredMethod) {
@@ -58,33 +65,36 @@ public class AopProcessor {
             adviceDefinition = new AdviceDefinition();
             AdviceFactory.getInstance().adviceDefinitionMap.put(methodFullName, adviceDefinition);
         }
-        adviceDefinition.getBeanNames().add(beanName);
 
         Method[] declaredMethods = aspectClass.getDeclaredMethods();
         for (Method declaredMethod : declaredMethods) {
             if (declaredMethod.isAnnotationPresent(Before.class)) {
                 adviceDefinition.setHasBefore(true);
                 adviceDefinition.getBeforeMethods().add(declaredMethod);
+                adviceDefinition.getBeforeBeanName().put(CommonUtil.getFullMethodName(declaredMethod), beanName);
             }
             if (declaredMethod.isAnnotationPresent(After.class)) {
                 adviceDefinition.setHasAfter(true);
                 adviceDefinition.getAfterMethods().add(declaredMethod);
-                Collections.reverse(adviceDefinition.getAfterMethods());
+                adviceDefinition.getAfterBeanName().put(CommonUtil.getFullMethodName(declaredMethod), beanName);
             }
             if (declaredMethod.isAnnotationPresent(AfterReturning.class)) {
                 adviceDefinition.setHasAfterReturning(true);
                 adviceDefinition.getAfterReturningMethods().add(declaredMethod);
-                Collections.reverse(adviceDefinition.getAfterReturningMethods());
+                adviceDefinition.getAfterReturningBeanName().put(CommonUtil.getFullMethodName(declaredMethod), beanName);
             }
             //待优化，目前最好只定义一个异常
             if (declaredMethod.isAnnotationPresent(AfterThrowing.class)) {
                 adviceDefinition.setHasAfterThrowing(true);
                 adviceDefinition.getAfterThrowingMethods().add(declaredMethod);
+                adviceDefinition.getAfterThrowingBeanName().put(CommonUtil.getFullMethodName(declaredMethod), beanName);
+
             }
             //待优化，目前最好只定义一个环绕
             if (declaredMethod.isAnnotationPresent(Around.class)) {
                 adviceDefinition.setHasAround(true);
                 adviceDefinition.getAroundMethods().add(declaredMethod);
+                adviceDefinition.getAroundBeanName().put(CommonUtil.getFullMethodName(declaredMethod), beanName);
             }
         }
     }

@@ -2,7 +2,9 @@ package com.slc.framework.aop.core;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AdviceDefinition {
     private boolean hasBefore;
@@ -11,20 +13,66 @@ public class AdviceDefinition {
     private boolean hasAfterThrowing;
     private boolean hasAround;
 
-    private List<String> beanNames=new ArrayList<>();
     private List<Method> beforeMethods = new ArrayList<>();
     private List<Method> afterMethods = new ArrayList<>();
     private List<Method> afterReturningMethods = new ArrayList<>();
     private List<Method> afterThrowingMethods = new ArrayList<>();
     private List<Method> aroundMethods = new ArrayList<>();
 
-    public List<String> getBeanNames() {
-        return beanNames;
+    private Map<String,String> beforeBeanName = new HashMap<>();
+    private Map<String,String> afterBeanName = new HashMap<>();
+    private Map<String,String> afterReturningBeanName = new HashMap<>();
+    private Map<String,String> afterThrowingBeanName = new HashMap<>();
+    private Map<String,String> aroundBeanName = new HashMap<>();
+
+    public Map<String, String> getBeforeBeanName() {
+        return beforeBeanName;
     }
 
-    public void setBeanNames(List<String> beanNames) {
-        this.beanNames = beanNames;
+    public void setBeforeBeanName(Map<String, String> beforeBeanName) {
+        this.beforeBeanName = beforeBeanName;
     }
+
+    public Map<String, String> getAfterBeanName() {
+        return afterBeanName;
+    }
+
+    public void setAfterBeanName(Map<String, String> afterBeanName) {
+        this.afterBeanName = afterBeanName;
+    }
+
+    public Map<String, String> getAfterReturningBeanName() {
+        return afterReturningBeanName;
+    }
+
+    public void setAfterReturningBeanName(Map<String, String> afterReturningBeanName) {
+        this.afterReturningBeanName = afterReturningBeanName;
+    }
+
+    public Map<String, String> getAfterThrowingBeanName() {
+        return afterThrowingBeanName;
+    }
+
+    public void setAfterThrowingBeanName(Map<String, String> afterThrowingBeanName) {
+        this.afterThrowingBeanName = afterThrowingBeanName;
+    }
+
+    public Map<String, String> getAroundBeanName() {
+        return aroundBeanName;
+    }
+
+    public void setAroundBeanName(Map<String, String> aroundBeanName) {
+        this.aroundBeanName = aroundBeanName;
+    }
+
+    //    private List<String> beanNames=new ArrayList<>();
+//    public List<String> getBeanNames() {
+//        return beanNames;
+//    }
+//
+//    public void setBeanNames(List<String> beanNames) {
+//        this.beanNames = beanNames;
+//    }
 
 
     public boolean isHasBefore() {

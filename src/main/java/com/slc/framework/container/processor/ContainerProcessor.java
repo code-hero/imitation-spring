@@ -10,8 +10,6 @@ import com.slc.framework.util.CommonUtil;
 import net.sf.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ContainerProcessor {
@@ -55,7 +53,7 @@ public class ContainerProcessor {
             if (adviceDefinition.isHasBefore()) {
                 List<Method> beforeMethods = adviceDefinition.getBeforeMethods();
                 for (Method beforeMethod : beforeMethods) {
-                    Object bean = BeanFactory.getBean(adviceDefinition.getBeanNames().get(beforeMethods.indexOf(beforeMethod)));
+                    Object bean = BeanFactory.getBean(adviceDefinition.getBeforeBeanName().get(CommonUtil.getFullMethodName(beforeMethod)));
                     beforeMethod.invoke(bean);
                 }
             }
@@ -64,7 +62,7 @@ public class ContainerProcessor {
                 List<Method> aroundMethods = adviceDefinition.getAroundMethods();
                 for (Method aroundMethod : aroundMethods) {
                     JoinPoint joinPoint = new JoinPoint(obj, method, args, proxy);
-                    Object bean = BeanFactory.getBean(adviceDefinition.getBeanNames().get(aroundMethods.indexOf(aroundMethod)));
+                    Object bean = BeanFactory.getBean(adviceDefinition.getAroundBeanName().get(CommonUtil.getFullMethodName(aroundMethod)));
                     aroundMethod.invoke(bean, joinPoint);
                     break;//多个around 只执行第一个around
                 }
@@ -74,12 +72,9 @@ public class ContainerProcessor {
             }
             // 执行后置通知
             if (adviceDefinition.isHasAfter()) {
-                List<String> beanNamesCopy = new ArrayList<>(adviceDefinition.getBeanNames());
-                Collections.reverse(beanNamesCopy);
-
                 List<Method> afterMethods = adviceDefinition.getAfterMethods();
                 for (Method afterMethod : afterMethods) {
-                    Object bean = BeanFactory.getBean(beanNamesCopy.get(afterMethods.indexOf(afterMethod)));
+                    Object bean = BeanFactory.getBean(adviceDefinition.getAfterBeanName().get(CommonUtil.getFullMethodName(afterMethod)));
                     afterMethod.invoke(bean);
                 }
             }
@@ -89,7 +84,7 @@ public class ContainerProcessor {
             if (adviceDefinition.isHasAfterThrowing()) {
                 List<Method> afterThrowingMethods = adviceDefinition.getAfterThrowingMethods();
                 for (Method afterThrowingMethod : afterThrowingMethods) {
-                    Object bean = BeanFactory.getBean(adviceDefinition.getBeanNames().get(afterThrowingMethods.indexOf(afterThrowingMethod)));
+                    Object bean = BeanFactory.getBean(adviceDefinition.getAfterThrowingBeanName().get(CommonUtil.getFullMethodName(afterThrowingMethod)));
                     try {
                         afterThrowingMethod.invoke(bean, e);
                     } catch (Exception ee) {
@@ -100,13 +95,9 @@ public class ContainerProcessor {
         } finally {
             // 执行返回通知
             if (adviceDefinition.isHasAfterReturning()) {
-                List<String> beanNamesCopy = new ArrayList<>(adviceDefinition.getBeanNames());
-                Collections.reverse(beanNamesCopy);
-
                 List<Method> afterReturningMethods = adviceDefinition.getAfterReturningMethods();
                 for (Method afterReturningMethod : afterReturningMethods) {
-                    Object bean = BeanFactory.getBean(beanNamesCopy.get(afterReturningMethods.indexOf(afterReturningMethod)));
-
+                    Object bean = BeanFactory.getBean(adviceDefinition.getAfterReturningBeanName().get(CommonUtil.getFullMethodName(afterReturningMethod)));
                     try {
                         afterReturningMethod.invoke(bean);
                     } catch (Exception e) {
