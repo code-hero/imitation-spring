@@ -69,15 +69,15 @@ public class ContainerProcessor {
                 //执行目标方法
                 result = doRealMethod(obj, method, args, proxy);
             }
-
-            // 执行返回通知
-            if (adviceDefinition.isHasAfterReturning()) {
-                List<Method> afterReturningMethods = adviceDefinition.getAfterReturningMethods();
-                for (Method afterReturningMethod : afterReturningMethods) {
+            // 执行后置通知
+            if (adviceDefinition.isHasAfter()) {
+                List<Method> afterMethods = adviceDefinition.getAfterMethods();
+                for (Method afterMethod : afterMethods) {
                     Object bean = BeanFactory.getBean(adviceDefinition.getBeanName());
-                    afterReturningMethod.invoke(bean);
+                    afterMethod.invoke(bean);
                 }
             }
+
         } catch (Exception e) {
             // 执行返回通知
             if (adviceDefinition.isHasAfterThrowing()) {
@@ -92,18 +92,19 @@ public class ContainerProcessor {
                 }
             }
         } finally {
-            // 执行后置通知
-            if (adviceDefinition.isHasAfter()) {
-                List<Method> afterMethods = adviceDefinition.getAfterMethods();
-                for (Method afterMethod : afterMethods) {
+            // 执行返回通知
+            if (adviceDefinition.isHasAfterReturning()) {
+                List<Method> afterReturningMethods = adviceDefinition.getAfterReturningMethods();
+                for (Method afterReturningMethod : afterReturningMethods) {
                     Object bean = BeanFactory.getBean(adviceDefinition.getBeanName());
                     try {
-                        afterMethod.invoke(bean);
+                        afterReturningMethod.invoke(bean);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 }
             }
+
         }
         return result;
     }

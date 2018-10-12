@@ -1,6 +1,7 @@
 package com.demo;
 
 import com.demo.aop.AopService;
+import com.demo.aop.aoporig.AopOrigService;
 import com.demo.async.TaskService;
 import com.demo.handle.MyHandle;
 import com.demo.ioc.UserService;
@@ -36,8 +37,9 @@ public class Application {
 //        asyncTest02();
 //        asyncTest03();
 //        asyncTest04();
-//        aopTest();
+        aopTest();
 //        aopTestByAnno();
+//          aopOrigTest();
     }
 
     private static void asyncTest01() throws Exception {
@@ -93,5 +95,11 @@ public class Application {
     private static void aopTestByAnno() {
         AopService aopService = BeanFactory.getBean("AopService", AopService.class);
         aopService.bb();
+    }
+
+    private static void aopOrigTest() {
+        AopOrigService aopOrigService = BeanFactory.getBean("AopOrigService", AopOrigService.class);
+        aopOrigService.sayHello();
+
     }
 }
