@@ -17,16 +17,25 @@ public class AdviceDefinition {
     private List<Method> afterThrowingMethods = new ArrayList<>();
     private List<Method> aroundMethods = new ArrayList<>();
 
-    private String beanName;
+    //    private String beanName;
+//    public String getBeanName() {
+//        return beanName;
+//    }
+//
+//    public void setBeanName(String beanName) {
+//        this.beanName = beanName;
+//    }
 
+    private List<String> beanNames=new ArrayList<>();
 
-    public String getBeanName() {
-        return beanName;
+    public List<String> getBeanNames() {
+        return beanNames;
     }
 
-    public void setBeanName(String beanName) {
-        this.beanName = beanName;
+    public void setBeanNames(List<String> beanNames) {
+        this.beanNames = beanNames;
     }
+
 
     public boolean isHasBefore() {
         return hasBefore;

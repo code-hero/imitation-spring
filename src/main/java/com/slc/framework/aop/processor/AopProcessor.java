@@ -56,10 +56,9 @@ public class AopProcessor {
         AdviceDefinition adviceDefinition = AdviceFactory.getInstance().adviceDefinitionMap.get(methodFullName);
         if (adviceDefinition == null) {
             adviceDefinition = new AdviceDefinition();
-            adviceDefinition.setBeanName(beanName);
             AdviceFactory.getInstance().adviceDefinitionMap.put(methodFullName, adviceDefinition);
-
         }
+        adviceDefinition.getBeanNames().add(beanName);
 
         Method[] declaredMethods = aspectClass.getDeclaredMethods();
         for (Method declaredMethod : declaredMethods) {
