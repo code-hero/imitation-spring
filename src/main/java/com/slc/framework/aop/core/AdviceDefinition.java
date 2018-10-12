@@ -11,22 +11,12 @@ public class AdviceDefinition {
     private boolean hasAfterThrowing;
     private boolean hasAround;
 
+    private List<String> beanNames=new ArrayList<>();
     private List<Method> beforeMethods = new ArrayList<>();
     private List<Method> afterMethods = new ArrayList<>();
     private List<Method> afterReturningMethods = new ArrayList<>();
     private List<Method> afterThrowingMethods = new ArrayList<>();
     private List<Method> aroundMethods = new ArrayList<>();
-
-    //    private String beanName;
-//    public String getBeanName() {
-//        return beanName;
-//    }
-//
-//    public void setBeanName(String beanName) {
-//        this.beanName = beanName;
-//    }
-
-    private List<String> beanNames=new ArrayList<>();
 
     public List<String> getBeanNames() {
         return beanNames;
